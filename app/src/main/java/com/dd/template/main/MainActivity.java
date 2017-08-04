@@ -3,6 +3,8 @@ package com.dd.template.main;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,7 +14,6 @@ import com.dd.template.R;
 import static com.dd.template.utils.ViewUtils.findById;
 
 public class MainActivity extends AppCompatActivity implements MainView {
-
     private MainPresenter presenter;
 
     @Override
@@ -37,7 +38,20 @@ public class MainActivity extends AppCompatActivity implements MainView {
             }
         });
 
+        showImeInfo();
+
         presenter = new MainPresenter(this);
+    }
+
+    public void showImeInfo() {
+        TextView textView = findById(this, R.id.imeInfo);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        StringBuffer info = new StringBuffer();
+        for (InputMethodInfo imi: imm.getEnabledInputMethodList()) {
+            info.append(imi.getServiceName()).append("\n");
+        }
+        textView.setText(info.toString());
     }
 
     @Override
